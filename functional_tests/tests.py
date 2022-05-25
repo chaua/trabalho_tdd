@@ -66,10 +66,13 @@ class NewVisitorTest(LiveServerTestCase):
         # acrescentar outro item. Ela insere "Comprar cola instantâne"
         # e assinala prioridade baixa pois ela ainda tem cola suficiente
         # por algum tempo
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.browser.find_element(by=By.ID, value='id_new_item')
+        selectbox = Select(self.browser.find_element(by=By.ID, value='prioridade'))
+
         inputbox.send_keys("Comprar cola instantânea")
-        inputbox.send_keys(Keys.ENTER)
         selectbox.select_by_visible_text('baixa')
+
+        inputbox.send_keys(Keys.ENTER)
 
         # A página é atualizada novamente e agora mostra os dois
         # itens em sua lista e as respectivas prioridades
