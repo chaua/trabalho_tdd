@@ -7,8 +7,8 @@
 		<form method="POST" action="/lists/new">
 			<input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
             <select name="prioridades" id="prioridade">
-              <option value="0">baixa</option>
-              <option value="1">alta</option>
+              <option value="baixa">baixa</option>
+              <option value="alta">alta</option>
             </select>
 			{% csrf_token %}
 		</form>
