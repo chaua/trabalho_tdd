@@ -85,46 +85,53 @@ class NewVisitorTest(LiveServerTestCase):
     # pequeno texto explicativo para isso.
 
     # Ela acessa essa URL -- sua lista de tarefas continua lá.
-    # def test_multiple_users_can_start_lists_at_different_urls(self):
-    #     # Edith inicia uma nova lista de tarefas
-    #     self.browser.get(self.live_server_url)
-    #     inputbox = self.browser.find_element_by_id('id_new_item')
-    #     inputbox.send_keys('Buy peacock feathers')
-    #     inputbox.send_keys(Keys.ENTER)
-    #     self.wait_for_row_in_list_table('1: Buy peacock feathers')
-    #
-    #     # Ela percebe que sua lista te um URL único
-    #     edith_list_url = self.browser.current_url
-    #     self.assertRegex(edith_list_url, '/lists/.+')
-    #
-    #     # Agora um novo usuário, Francis, chega ao site
-    #
-    #     ## Usamos uma nova versão do nagegador para garantir que nenhuma
-    #     ## informação de Edith está vindo de cookies, etc
-    #
-    #     self.browser.quit()
-    #     self.browser = webdriver.Firefox()
-    #
-    #     # Francis acessa a página inicial. Não há sinal da lista de Edith
-    #     self.browser.get(self.live_server_url)
-    #     page_text = self.browser.find_element_by_tag_name('body').text
-    #     self.assertNotIn('Buy peacock feathers', page_text)
-    #     self.assertNotIn('make a fly', page_text)
-    #
-    #     # Francis inicia uma nova lista inserindo um novo item.
-    #     inputbox = self.browser.find_element_by_id('id_new_item')
-    #     inputbox.send_keys('Buy milk')
-    #     inputbox.send_keys(Keys.ENTER)
-    #     self.wait_for_row_in_list_table('1: Buy milk')
-    #
-    #     # Francis obtém seu próprio URL exclusivo
-    #     francis_list_url = self.browser.current_url
-    #     self.assertRegex(edith_list_url, '/lists/.+')
-    #     self.assertNotEqual(francis_list_url, edith_list_url)
-    #
-    #     # Novamente não há sinal algum da lista de Edith
-    #     page_text = self.browser.find_element_by_tag_name('body').text
-    #     self.assertNotIn('Buy peacock feathers', page_text)
-    #     self.assertIn('Buy milk', page_text)
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        # Edith inicia uma nova lista de tarefas
+        self.browser.get(self.live_server_url)
+
+        inputbox = self.browser.find_element(by=By.ID, value='id_new_item')
+        selectbox = Select(self.browser.find_element(by=By.ID, value='prioridade'))
+        inputbox.send_keys('Comprar anzol')
+        selectbox.select_by_visible_text('alta')
+
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1 - Comprar anzol - prioridade alta')
+
+        # Ela percebe que sua lista te um URL único
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+
+        # Agora um novo usuário, Francis, chega ao site
+
+        ## Usamos uma nova versão do nagegador para garantir que nenhuma
+        ## informação de Edith está vindo de cookies, etc
+
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Francis acessa a página inicial. Não há sinal da lista de Edith
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element(by=By.TAG_NAME, value='body').text
+        self.assertNotIn('Comprar anzol', page_text)
+        self.assertNotIn('prioridade alta', page_text)
+
+        # Francis inicia uma nova lista inserindo um novo item.
+        inputbox = self.browser.find_element(by=By.ID, value='id_new_item')
+        selectbox = Select(self.browser.find_element(by=By.ID, value='prioridade'))
+        inputbox.send_keys('Comprar leite')
+        selectbox.select_by_visible_text('baixa')
+
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1 - Comprar leite - prioridade baixa')
+
+        # Francis obtém seu próprio URL exclusivo
+        francis_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        # Novamente não há sinal algum da lista de Edith
+        page_text = self.browser.find_element(by=By.TAG_NAME, value='body').text
+        self.assertNotIn('Comprar anzol', page_text)
+        self.assertIn('Comprar leite', page_text)
 
     # Fim
