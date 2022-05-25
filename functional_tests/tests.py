@@ -10,7 +10,7 @@ from selenium.webdriver.support.select import Select
 MAX_WAIT = 10
 
 
-class NewVsitorTest(LiveServerTestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -41,7 +41,7 @@ class NewVsitorTest(LiveServerTestCase):
         # Ela percebe que o título da página e o cabeçalho mencionam
         # listas de tarefas com prioridade (priority to-do)
         self.assertIn('priority to-do', self.browser.title)
-        header_text = self.browser.find_element(by=By.NAME, value='h1').text
+        header_text = self.browser.find_element(by=By.TAG_NAME, value='h1').text
         self.assertIn('priority to-do', header_text)
 
         # Ela é convidada a inserir um item de tarefa e a prioridade da
